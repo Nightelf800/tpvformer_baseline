@@ -1,0 +1,10 @@
+mmcv-full==1.4.0 -f https://download.openmmlab.com/mmcv/dist/cu102/torch1.10/index.html
+mmdet==2.14.0
+# mmdet3d==0.18.1
+mmsegmentation==0.14.1
+numba==0.48.0
+numpy==1.23.1
+Pillow==9.3.0
+PyYAML==6.0
+timm==0.4.12
+nuscenes-devkit==1.0.5
