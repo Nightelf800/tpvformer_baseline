@@ -200,15 +200,28 @@ def main(local_rank, args):
                 ce_input = outputs_pts.squeeze(-1).squeeze(-1)
                 ce_label = train_pt_labs.squeeze(-1)
 
+            start_loss = time.time()
             loss = lovasz_softmax(
                 torch.nn.functional.softmax(lovasz_input, dim=1), 
                 lovasz_label, ignore=ignore_label
             ) + loss_func(ce_input, ce_label)
+            end_loss = time.time()
+            print("loss time: {}s".format(end_loss - start_loss))
 
             optimizer.zero_grad()
+
+            start_grad = time.time()
             loss.backward()
+            end_grad = time.time()
+            print("grad time: {}s".format(end_grad - start_grad))
+
             grad_norm = torch.nn.utils.clip_grad_norm_(my_model.parameters(), cfg.grad_max_norm)
+
+            start_opt = time.time()
             optimizer.step()
+            end_opt = time.time()
+            print("opt time: {}s".format(end_opt - start_opt))
+
             loss_list.append(loss.item())
             scheduler.step_update(global_iter)
             time_e = time.time()

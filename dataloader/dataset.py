@@ -23,6 +23,8 @@ class ImagePoint_NuScenes(data.Dataset):
         return len(self.nusc_infos)
 
     def __getitem__(self, index):
+
+        start_dataload = time.time()
         info = self.nusc_infos[index]
         imgs_info = self.get_data_info(info)
         img_metas = {
@@ -44,6 +46,9 @@ class ImagePoint_NuScenes(data.Dataset):
         points = np.fromfile(lidar_path, dtype=np.float32, count=-1).reshape([-1, 5])
 
         data_tuple = (imgs, img_metas, points[:, :3], points_label.astype(np.uint8))
+
+        end_dataload = time.time()
+        print("dataload time: {}s".format(end_dataload - start_dataload))
         return data_tuple
     
     def get_data_info(self, info):

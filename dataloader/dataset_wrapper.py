@@ -1,6 +1,6 @@
 
 import numpy as np
-import torch
+import torch, time
 import numba as nb
 from torch.utils import data
 from dataloader.transform_3d import PadMultiViewImage, NormalizeMultiviewImage, \
@@ -58,6 +58,7 @@ class DatasetWrapper_NuScenes(data.Dataset):
         data = self.imagepoint_dataset[index]
         imgs, img_metas, xyz, labels = data
 
+        start_predata = time.time()
         # deal with img augmentations
         imgs_dict = {'img': imgs, 'lidar2img': img_metas['lidar2img']}
         for t in self.transforms:
@@ -93,6 +94,8 @@ class DatasetWrapper_NuScenes(data.Dataset):
 
         data_tuple += (grid_ind, labels)
 
+        end_predata = time.time()
+        print("predata time: {}s".format(end_predata - start_predata))
         return data_tuple
 
 

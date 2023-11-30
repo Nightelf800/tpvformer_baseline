@@ -2,6 +2,7 @@
 from mmcv.runner import force_fp32, auto_fp16, BaseModule
 from mmseg.models import SEGMENTORS, builder
 import warnings
+import time
 from dataloader.grid_mask import GridMask
 
 
@@ -85,7 +86,18 @@ class TPVFormer(BaseModule):
         ):
         """Forward training function.
         """
+        start_backbone = time.time()
         img_feats = self.extract_img_feat(img=img, use_grid_mask=use_grid_mask)
+        end_backbone = time.time()
+        print("backbone time: {}s".format(end_backbone - start_backbone))
+
+        start_tpv_head = time.time()
         outs = self.tpv_head(img_feats, img_metas)
+        end_tpv_head = time.time()
+        print("tpv_head time: {}s".format(end_tpv_head - start_tpv_head))
+
+        start_aggregator = time.time()
         outs = self.tpv_aggregator(outs, points)
+        end_aggregator = time.time()
+        print("aggregator time: {}s".format(end_aggregator - start_aggregator))
         return outs
