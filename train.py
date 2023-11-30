@@ -1,8 +1,8 @@
-
 import os, time, argparse, os.path as osp, numpy as np
 import torch
 import torch.distributed as dist
-
+# init gpu
+os.environ["CUDA_VISIBLE_DEVICES"] = '1'
 from utils.metric_util import MeanIoU
 from utils.load_save_util import revise_ckpt, revise_ckpt_2
 from dataloader.dataset import get_nuScenes_label_name
@@ -324,8 +324,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    # init gpu
-    os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id
+
     ngpus = torch.cuda.device_count()
     args.gpus = ngpus
     print(args)

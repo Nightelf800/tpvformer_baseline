@@ -1,3 +1,5 @@
+import os.path
+
 import torch
 from dataloader.dataset import ImagePoint_NuScenes
 from dataloader.dataset_wrapper import custom_collate_fn, DatasetWrapper_NuScenes
@@ -17,7 +19,7 @@ def build(dataset_config,
     val_imageset = val_dataloader_config["imageset"]
     label_mapping = dataset_config["label_mapping"]
 
-    nusc = NuScenes(version=version, dataroot=data_path, verbose=True)
+    nusc = NuScenes(version=version, dataroot=os.path.join(data_path, version), verbose=True)
     train_dataset = ImagePoint_NuScenes(data_path, imageset=train_imageset,
                                      label_mapping=label_mapping, nusc=nusc)
     val_dataset = ImagePoint_NuScenes(data_path, imageset=val_imageset,
